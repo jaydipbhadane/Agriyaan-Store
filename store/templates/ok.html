@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<html>
+    <head>
+        <title>Title</title>
+
+		<style>
+			.invoice-box {
+				max-width: 800px;
+				margin: auto;
+				padding: 30px;
+				border: 1px solid #eee;
+				box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+				font-size: 16px;
+				line-height: 24px;
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				color: #555;
+			}
+
+			.invoice-box table {
+				width: 100%;
+				line-height: inherit;
+				text-align: left;
+			}
+
+			.invoice-box table td {
+				padding: 5px;
+				vertical-align: top;
+			}
+
+			.invoice-box table tr td:nth-child(2) {
+				text-align: right;
+			}
+
+			.invoice-box table tr.top table td {
+				padding-bottom: 20px;
+			}
+
+			.invoice-box table tr.top table td.title {
+				font-size: 45px;
+				line-height: 45px;
+				color: #333;
+			}
+
+			.invoice-box table tr.information table td {
+				padding-bottom: 40px;
+			}
+
+			.invoice-box table tr.heading td {
+				background: #eee;
+				border-bottom: 1px solid #ddd;
+				font-weight: bold;
+			}
+
+			.invoice-box table tr.details td {
+				padding-bottom: 20px;
+			}
+
+			.invoice-box table tr.item td{
+				border-bottom: 1px solid #eee;
+			}
+
+			.invoice-box table tr.item.last td {
+				border-bottom: none;
+			}
+
+			.invoice-box table tr.total td:nth-child(2) {
+				border-top: 2px solid #eee;
+				font-weight: bold;
+			}
+
+			@media only screen and (max-width: 600px) {
+				.invoice-box table tr.top table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+
+				.invoice-box table tr.information table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+			}
+
+			/** RTL **/
+			.rtl {
+				direction: rtl;
+				font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+			}
+
+			.rtl table {
+				text-align: right;
+			}
+
+			.rtl table tr td:nth-child(3) {
+				text-align: left;
+			}
+
+
+
+
+
+            body {
+                font-weight: 200;
+                font-size: 14px;
+            }
+            .header {
+                font-size: 20px;
+                font-weight: 100;
+                text-align: center;
+                color: #007cae;
+            }
+            .title {
+                font-size: 22px;
+                font-weight: 100;
+               /* text-align: right;*/
+               padding: 10px 20px 0px 20px;
+            }
+            .title span {
+                color: #007cae;
+            }
+            .details {
+                padding: 10px 20px 0px 20px;
+                text-align: left !important;
+                /*margin-left: 40%;*/
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+        </style>
+    </head>
+    <body>
+	<style>
+</style>
+    	<div>
+		<br><br><br><h1><strong><center>Agriyaan Technologies Private Limited</center></strong></h1>
+
+</div>
+<div id="container">
+	<div id="header">
+		<div id="logo">
+		</div>
+
+		<div id="reference">
+			<h3><strong></strong></h3>
+			{% for invoice in invoices|slice:":1" %}
+			<h4>Date : {{invoice.date}}</h4>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div id="fromto">
+		<div id="from">
+			<p>
+				<strong>From,</strong><br>
+				Agriyaan Technologies <br>
+                554 MOTI NAGAR WEST <br>
+                DR HABIB MARG JAIPUR <br>
+                RAJASTHAN 302021 INDIA <br><br>
+				Mob : +91 999 382 9000 <br>
+				Email: contact@agriyaan.com <br>
+				Web: www.agriyaan.com
+			</p>
+		</div>
+		<div id="to">
+			<p>
+			{% for invoice in invoices|slice:":1" %}
+				<strong>To,</strong><br>
+				<br><strong>Name : </strong>{{invoice.name}}
+				<br><strong>Address : </strong>{{invoice.address}}
+				<br><strong>Zip Code : </strong>{{invoice.zipcode}}
+				<br><strong>Mob : </strong>{{invoice.phone}}
+				{%endfor%}
+			</p>
+		</div>
+	</div>
+
+	<div id="items">
+		<table>
+			<tr>
+				<th><strong>Product Name</strong></th>
+				<th><strong>Price</strong></th>
+				<th><strong>Quantity</strong></th>
+				<th><strong>Total</strong></th>
+			</tr>
+            {% for invoice in invoices %}
+            <tr>
+				<th>{{invoice.product.name}}</th>
+				<th>Rs. {{invoice.price}}</th>
+				<th>{{invoice.quantity}}</th>
+				<th>Rs. {{invoice.finalprice}}</th>
+			</tr>
+            {%endfor%}
+		</table>
+	</div>
+
+	<div id="summary">
+		<div id="note">
+			<p></p>
+		</div>
+		<div id="total">
+			<table border="1">
+				<tr>
+					<td>GST</td>
+					<td>1.5</td>
+				</tr>
+				<tr>
+					<td>Shipping Charges</td>
+					<td>{{150}}</td>
+				</tr>
+				<tr>
+					<td>Total</td>
+			{% for invoice in invoices|slice:":1" %}
+
+					<td>Rs. {{invoice.toalprice}}</td>
+            {%endfor%}
+
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div id="footer">
+	</div>
+</div>
+
+    </body>
+</html>
+{% endblock %}
